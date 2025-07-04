@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/gonzaloan/go-awesome/internal/db"
 	"github.com/gonzaloan/go-awesome/internal/env"
 	"github.com/gonzaloan/go-awesome/internal/store"
@@ -32,5 +33,13 @@ func main() {
 	}
 	log.Printf("Starting server on address %s", app.config.address)
 
+	defer func(database *sql.DB) {
+		err := database.Close()
+		if err != nil {
+			log.Panic(err)
+		}
+	}(database)
+
+	log.Println("Database connection established")
 	log.Fatal(app.listen(app.mount()))
 }
