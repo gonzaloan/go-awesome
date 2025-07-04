@@ -3,16 +3,26 @@ package main
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/gonzaloan/go-awesome/internal/store"
 	"net/http"
 	"time"
 )
 
 type application struct {
 	config config
+	store  store.Storage
 }
 
 type config struct {
-	address string
+	address  string
+	dbConfig dbConfig
+}
+
+type dbConfig struct {
+	addr        string
+	maxOpenCons int
+	maxIdleCons int
+	maxIdleTime string
 }
 
 func (app *application) mount() http.Handler {
